@@ -8,4 +8,4 @@ const Migrations = [
   },
 ];
 
-module.exports = Migrations;
+export default Migrations;

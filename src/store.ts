@@ -1,23 +1,23 @@
 'use strict';
-
-var AsyncStorage = require('react-native').AsyncStorage;
-var Model = require('./model.js');
-var Util = require('./util.js');
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Model from "./model";
+import migrations from "./migrations";
 
 class Store {
 
-    constructor(opts) {
+    private dbName: string;
+
+    constructor(opts: any) {
         this.dbName = opts.dbName;
     }
 
-    async _getCurrentVersion(versionKey) {
-        var currentVersion = await AsyncStorage.getItem(versionKey);
+    async _getCurrentVersion(versionKey: string) {
+        var currentVersion: string|number|null = await AsyncStorage.getItem(versionKey);
         currentVersion = currentVersion || 0;
-        return parseFloat(currentVersion);
+        return parseFloat(currentVersion as string);
     }
 
     async migrate() {
-        var migrations = require('./migrations.js');
         var versionKey = `${this.dbName}_version`;
         var currentVersion = await this._getCurrentVersion(versionKey);
         var target = migrations.slice(-1)[0];
@@ -31,7 +31,7 @@ class Store {
         }
     }
 
-    model(modelName) {
+    model(modelName: string) {
         return new Model(modelName, this.dbName);
     }
 
@@ -42,7 +42,7 @@ class Store {
 
 }
 
-module.exports = Store;
+export default Store;
 
 
 // Store.model("user").get({ id:1 },{fite}).then().fail();

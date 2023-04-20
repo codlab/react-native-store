@@ -1,30 +1,30 @@
 'use strict'
 
 class Filter {
-    constructor() {
-        this.comparisonOperators = [
-            'gt',
-            'gte',
-            'lt',
-            'lte',
-            'between',
-            'inq',
-            'nin',
-            'regexp'
-        ];
-        this.logicalOperators = [
-            'and',
-            'or'
-        ];
-    }
 
-    apply(set, settings) {
+    comparisonOperators = [
+        'gt',
+        'gte',
+        'lt',
+        'lte',
+        'between',
+        'inq',
+        'nin',
+        'regexp'
+    ];
+    
+    logicalOperators = [
+        'and',
+        'or'
+    ];
+
+    apply(set: any, settings: any) {
         var where = settings.where || null;
         var fields = settings.fields || {};
         var order = settings.order || {};
         var offset = settings.offset || 0;
         var limit = settings.limit;
-        var result = [];
+        var result: any[] = [];
         //Elements that satisfy where filter
         if (where != null) {
             for (var i in set) {
@@ -50,15 +50,15 @@ class Filter {
             //sort by ASC
             var greater = order[orderKeys[key]] === 'DESC' ? -1 : 1;
             var lesser = greater * -1;
-            var keySort = function(a, b) {
+            result.sort((a: any, b: any) => {
                 if (a[orderKeys[key]] < b[orderKeys[key]])
                     return lesser;
                 if (a[orderKeys[key]] > b[orderKeys[key]])
                     return greater;
                 if (a[orderKeys[key]] == b[orderKeys[key]])
                     return 0;
-            }
-            result.sort(keySort);
+                return 0;
+            });
         }
         //Apply limit and offset filters through results.slice(offset, offset + limit)
         if (typeof limit === 'number' && limit > 0)
@@ -68,7 +68,7 @@ class Filter {
         return result;
     }
 
-    evaluate(filter, element) {
+    evaluate(filter: any, element: any): boolean {
         var filterKeys = Object.keys(filter);
         if (typeof filter == 'object') {
             for (var i in filterKeys) {
@@ -89,10 +89,10 @@ class Filter {
             return true;
         }
         //It technically should never reach here, but just to be safe
-        return a == b;
+        return false;
     }
 
-    evaluateLogicalOperator(operator, filter, element) {
+    evaluateLogicalOperator(operator: any, filter: any, element: any) {
         if (operator == 'and') {
             for (var i in filter) {
                 var comp = filter[i];
@@ -108,7 +108,7 @@ class Filter {
         return false;
     }
 
-    evaluateComparisonOperator(operator, filter, element) {
+    evaluateComparisonOperator(operator: any, filter: any, element: any) {
         if (operator == 'neq')
             return element != filter;
         else if (operator == 'gt')
@@ -132,7 +132,7 @@ class Filter {
         return false;
     }
 
-    applyFieldsFilter(element, fields) {
+    applyFieldsFilter(element: any, fields: any) {
         //Fields filter will exclude all keys from the element for which there
         //is a corresponding key in the fields object with a value of false.
         //However, if one key in the fields filter has a value of true, all
@@ -169,4 +169,4 @@ class Filter {
     }
 }
 
-module.exports = Filter;
+export default Filter;

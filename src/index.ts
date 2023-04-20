@@ -1,8 +1,9 @@
 'use strict';
 
-var Store = require('./store.js');
+import Store from "./store"
+
 var store = new Store({
     dbName: "react-native-store"
 });
 
-module.exports = store;
+export default store;

@@ -1,24 +1,23 @@
 'use strict';
-var AsyncStorage = require('react-native').AsyncStorage;
-var Util = require('./util.js');
-var Filter = require('./filter.js')
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Util from "./util";
+import Filter from "./filter";
 
 class Model {
 
-    constructor(modelName, dbName) {
-        this.dbName = dbName;
-        this.modelName = modelName;
-        this.offset = 0;
-        this.limit = 10;
-        this.modelFilter = new Filter();
+    offset = 0;
+    limit = 10;
+    modelFilter = new Filter();
+
+    constructor(private modelName: string, private dbName: string) {
     }
 
-    async createDatabase() {
+    async createDatabase(): Promise<any> {
         await AsyncStorage.setItem(this.dbName, JSON.stringify({}));
         return this.getDatabase();
     }
 
-    async getDatabase() {
+    async getDatabase(): Promise<any> {
         var database = await AsyncStorage.getItem(this.dbName);
         if (database) {
             return Object.assign({}, JSON.parse(database));
@@ -181,4 +180,4 @@ class Model {
     }
 }
 
-module.exports = Model;
+export default Model;

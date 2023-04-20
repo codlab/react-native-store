@@ -1,10 +1,10 @@
 'use strict';
 
-module.exports = {
-    log: function(msg) {
+export default {
+    log: function(msg: string) {
         console.log(msg);
     },
-    error: function(msg) {
+    error: function(msg: string) {
         console.error(msg);
     }
 };
